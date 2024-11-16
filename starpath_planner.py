@@ -34,7 +34,7 @@ class SpaceAgendaPlanner:
         
         # Load spaceship image
         self.spaceship_image = tk.PhotoImage(file="rocket.png")  # Ensure you have spaceship.png
-        self.spaceship_image = self.spaceship_image.subsample(20, 20)
+        self.spaceship_image = self.spaceship_image.subsample(3, 3)
         self.rocket = self.splash_canvas.create_image(400, 500, image=self.spaceship_image)
         self.thrust_particles = []
 
