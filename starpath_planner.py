@@ -88,11 +88,11 @@ class SpaceAgendaPlanner:
             canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="white")
 
         # Title and star count
-        canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 24), fill="white")
-        canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 16), fill="yellow")
+        canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 28, "bold"), fill="white")
+        canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 18), fill="yellow")
 
         # Create planets with category labels
-        planet_coords = [(200, 200, 300, 300), (350, 200, 450, 300), (500, 200, 600, 300)]
+        planet_coords = [(125, 200, 225, 300), (325, 200, 425, 300), (525, 200, 625, 300)]
         for i, coords in enumerate(planet_coords):
             canvas.create_oval(coords, fill="blue")
             canvas.create_text(
@@ -100,34 +100,34 @@ class SpaceAgendaPlanner:
                 (coords[1] + coords[3]) // 2,
                 text=self.categories[i],
                 fill="white",
-                font=("Arial", 12),
+                font=("Arial", 14, "bold"),
             )
 
         # Add buttons aligned at the bottom
         buttons = [
-            ("Add Task", self.add_task_screen, "lightgreen"),
-            ("View Tasks", self.view_tasks_screen, "lightblue"),
-            ("Customization Shop", self.customization_screen, "lightyellow"),
+            ("Add Task", self.add_task_screen, "#32CD32"),
+            ("View Tasks", self.view_tasks_screen, "#1E90FF"),
+            ("Customization Shop", self.customization_screen, "#FFD700"),
         ]
         for i, (text, command, color) in enumerate(buttons):
-            canvas.create_window(250 + 150 * i, 500, window=tk.Button(self.root, text=text, command=command, bg=color, width=18, height=3))
+            tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2).place(x=100 + 220 * i, y=500)
 
     def add_task_screen(self):
         # Screen for adding a new task
         self.clear_screen()
 
-        tk.Label(self.root, text="Add New Task", font=("Tahoma", 20)).pack(pady=20)
+        tk.Label(self.root, text="Add New Task", font=("Tahoma", 20, "bold"), bg="black", fg="white").pack(pady=20)
 
-        tk.Label(self.root, text="Task Name:").pack(pady=5)
-        entry_name = tk.Entry(self.root)
+        tk.Label(self.root, text="Task Name:", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
+        entry_name = tk.Entry(self.root, font=("Arial", 14))
         entry_name.pack(pady=5)
 
-        tk.Label(self.root, text="Due Date (MM-DD-YYYY):").pack(pady=5)
-        entry_due_date = tk.Entry(self.root)
+        tk.Label(self.root, text="Due Date (MM-DD-YYYY):", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
+        entry_due_date = tk.Entry(self.root, font=("Arial", 14))
         entry_due_date.pack(pady=5)
 
-        tk.Label(self.root, text="Category:").pack(pady=5)
-        combo_category = ttk.Combobox(self.root, values=self.categories)
+        tk.Label(self.root, text="Category:", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
+        combo_category = ttk.Combobox(self.root, values=self.categories, font=("Arial", 14))
         combo_category.pack(pady=5)
 
         # Add Calendar
@@ -150,32 +150,33 @@ class SpaceAgendaPlanner:
             self.tasks.append({"name": name, "due_date": due_date, "category": category})
             self.create_main_screen()
 
-        tk.Button(self.root, text="Save Task", command=save_task, bg="lightgreen").pack(pady=10)
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=10)
+        tk.Button(self.root, text="Save Task", command=save_task, bg="#32CD32", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=10)
 
     def view_tasks_screen(self):
         # Screen for viewing tasks
         self.clear_screen()
 
-        tk.Label(self.root, text="Tasks", font=("Arial", 20)).pack(pady=20)
+        tk.Label(self.root, text="Tasks", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
 
         if not self.tasks:
-            tk.Label(self.root, text="No tasks available!", font=("Arial", 14)).pack(pady=20)
+            tk.Label(self.root, text="No tasks available!", font=("Arial", 16), bg="black", fg="white").pack(pady=20)
         else:
             for task in self.tasks:
-                frame = tk.Frame(self.root)
+                frame = tk.Frame(self.root, bg="black")
                 frame.pack(pady=5)
 
                 tk.Label(
-    frame,
-    text=f"Due Date: {task['due_date']}\nTask Name: {task['name']}\nCategory: {task['category']}",
-    font=("Arial", 14),
-).pack(side=tk.LEFT, padx=10)
+                    frame,
+                    text=f"Due Date: {task['due_date']}\nTask Name: {task['name']}\nCategory: {task['category']}",
+                    font=("Arial", 14),
+                    bg="black",
+                    fg="white"
+                ).pack(side=tk.LEFT, padx=10)
 
+                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#FF4500", fg="white", font=("Arial", 12, "bold")).pack(side=tk.LEFT, padx=5)
 
-                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t)).pack(side=tk.LEFT, padx=5)
-
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=20)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
 
     def complete_task(self, task):
         self.tasks.remove(task)
@@ -187,11 +188,11 @@ class SpaceAgendaPlanner:
         # Customization shop
         self.clear_screen()
 
-        tk.Label(self.root, text="Customization Shop", font=("Arial", 20)).pack(pady=20)
-        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Arial", 16)).pack(pady=10)
+        tk.Label(self.root, text="Customization Shop", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Arial", 16), bg="black", fg="yellow").pack(pady=10)
 
-        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Arial", 14)).pack(pady=10)
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=20)
+        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Arial", 14), bg="black", fg="white").pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
