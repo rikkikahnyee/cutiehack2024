@@ -32,8 +32,10 @@ class SpaceAgendaPlanner:
         # Add text with aesthetic font
         self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20, "italic"), fill="white")
         
-        # Draw rocket
-        self.rocket = self.splash_canvas.create_polygon(390, 500, 410, 500, 400, 460, fill="#cccccc", outline="#ffffff")
+        # Load spaceship image
+        self.spaceship_image = tk.PhotoImage(file="rocket.png")  # Ensure you have spaceship.png
+        self.spaceship_image = self.spaceship_image.subsample(20, 20)
+        self.rocket = self.splash_canvas.create_image(400, 500, image=self.spaceship_image)
         self.thrust_particles = []
 
         # Animate rocket flying up
@@ -41,15 +43,15 @@ class SpaceAgendaPlanner:
         self.animate_rocket()
 
     def animate_rocket(self):
-        # Move the rocket and add thrust particles
+        # Move the spaceship image and add thrust particles
         self.splash_canvas.move(self.rocket, 0, -self.rocket_speed)
         self.rocket_speed += 0.3  # Accelerate the rocket
 
         # Create dynamic thrust particles
-        x1, y1, x2, y2 = self.splash_canvas.coords(self.rocket)[0:4]
+        x1, y1 = self.splash_canvas.coords(self.rocket)
         thrust_particle = self.splash_canvas.create_oval(
-            x1 + random.randint(-5, 5), y2 + random.randint(10, 20),
-            x1 + random.randint(-2, 2), y2 + random.randint(20, 30),
+            x1 + random.randint(-5, 5), y1 + random.randint(10, 20),
+            x1 + random.randint(-2, 2), y1 + random.randint(20, 30),
             fill="orange", outline=""
         )
         self.thrust_particles.append(thrust_particle)
