@@ -92,7 +92,8 @@ class SpaceAgendaPlanner:
         canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 18), fill="yellow")
 
         # Create planets with category labels
-        planet_coords = [(125, 200, 225, 300), (325, 200, 425, 300), (525, 200, 625, 300)]
+        button_x_coords = [125, 325, 525]
+        planet_coords = [(x + 25, 250, x + 125, 350) for x in button_x_coords]
         for i, coords in enumerate(planet_coords):
             canvas.create_oval(coords, fill="blue")
             canvas.create_text(
@@ -110,7 +111,7 @@ class SpaceAgendaPlanner:
             ("Customization Shop", self.customization_screen, "#FFD700"),
         ]
         for i, (text, command, color) in enumerate(buttons):
-            tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2).place(x=100 + 220 * i, y=500)
+            tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2).place(x=button_x_coords[i], y=500)
 
     def add_task_screen(self):
         # Screen for adding a new task
