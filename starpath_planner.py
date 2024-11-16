@@ -1,54 +1,201 @@
-from tkinter import *
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import ttk
 from tkcalendar import Calendar
+import random
 
-# Create Main Window
-root = Tk()
-root.geometry("600x600")
-root.title("Starpath Planner")
+class SpaceAgendaPlanner:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Space-Themed Agenda Planner")
+        self.root.geometry("800x600")
+        self.root.config(bg="black")
 
-# Load Background Image
-backg = PhotoImage(file="spacebackground.png")
+        # Data structures
+        self.tasks = []
+        self.categories = ["Work", "Personal", "Fitness"]
+        self.stars = 0
 
-# Add Background Label
-background_label = Label(root, image=backg)
-background_label.place(relwidth=1, relheight=1)
+        # Start with splash screen
+        self.show_splash_screen()
 
-# Create Frame for Widgets (opaque look)
-frame1 = Frame(root, bg="#1e1f26", bd=2, relief="ridge")  # Set a background color for opacity effect
-frame1.place(relx=0.5, rely=0.5, anchor=CENTER, width=500, height=400)
+    def show_splash_screen(self):
+        # Splash screen with starry background and rocket animation
+        self.splash_canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
+        self.splash_canvas.pack(fill="both", expand=True)
 
-# Add Calendar
-calendar = Calendar(frame1, selectmode="day", year=2024, month=11, day=16,
-                    background="#1e1f26", foreground="white", selectbackground="#6c63ff", borderwidth=0)
-calendar.pack(pady=(10, 20))
+        # Add stars to the background
+        for _ in range(100):
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            self.splash_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
 
-# Add Label and Entry for Task
-task_label = Label(frame1, text="Task:", font=("Helvetica", 14), bg="#1e1f26", fg="white")
-task_label.pack(anchor=W, padx=20)
+        # Add text with aesthetic font
+        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20, "italic"), fill="white")
+        
+        # Draw rocket
+        self.rocket = self.splash_canvas.create_polygon(390, 500, 410, 500, 400, 460, fill="#cccccc", outline="#ffffff")
+        self.thrust_particles = []
 
-task_entry = Entry(frame1, width=30, font=("Helvetica", 14), bg="#333333", fg="white", insertbackground="white", relief="flat")
-task_entry.pack(pady=10)
+        # Animate rocket flying up
+        self.rocket_speed = 5  # Initial speed
+        self.animate_rocket()
 
-# Add Buttons (side by side with improved styles)
-button_frame = Frame(frame1, bg="#1e1f26")
-button_frame.pack(pady=20)
+    def animate_rocket(self):
+        # Move the rocket and add thrust particles
+        self.splash_canvas.move(self.rocket, 0, -self.rocket_speed)
+        self.rocket_speed += 0.3  # Accelerate the rocket
 
-def on_hover(button, bg_color):
-    """ Changes button background color on hover """
-    def hover_effect(event):
-        button['background'] = bg_color
-    def leave_effect(event):
-        button['background'] = "#6c63ff"
-    button.bind("<Enter>", hover_effect)
-    button.bind("<Leave>", leave_effect)
+        # Create dynamic thrust particles
+        x1, y1, x2, y2 = self.splash_canvas.coords(self.rocket)[0:4]
+        thrust_particle = self.splash_canvas.create_oval(
+            x1 + random.randint(-5, 5), y2 + random.randint(10, 20),
+            x1 + random.randint(-2, 2), y2 + random.randint(20, 30),
+            fill="orange", outline=""
+        )
+        self.thrust_particles.append(thrust_particle)
 
-add_button = Button(button_frame, text="Add Task", bg="#6c63ff", fg="white", font=("Helvetica", 12), relief="flat", padx=20, pady=5, activebackground="#5555ff")
-add_button.pack(side=LEFT, padx=10)
-on_hover(add_button, "#5555ff")
+        # Fade and delete old particles
+        for particle in self.thrust_particles[:]:
+            x1, y1, x2, y2 = self.splash_canvas.coords(particle)
+            self.splash_canvas.move(particle, 0, 3)  # Move particle down
+            self.splash_canvas.itemconfig(particle, fill="yellow")  # Change color over time
+            if y2 > 600:  # Remove particles off-screen
+                self.splash_canvas.delete(particle)
+                self.thrust_particles.remove(particle)
 
-view_button = Button(button_frame, text="View Agenda", bg="#6c63ff", fg="white", font=("Helvetica", 12), relief="flat", padx=20, pady=5, activebackground="#5555ff")
-view_button.pack(side=LEFT, padx=10)
-on_hover(view_button, "#5555ff")
+        # Check if rocket is off-screen
+        coords = self.splash_canvas.coords(self.rocket)
+        if coords[1] > 0:  # Rocket still visible
+            self.root.after(50, self.animate_rocket)
+        else:
+            # Transition to the main planner page
+            self.splash_canvas.destroy()
+            self.create_main_screen()
 
-# Run Application
-root.mainloop()
+    def create_main_screen(self):
+        # Main Screen UI
+        self.clear_screen()
+
+        # Create starry background
+        canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
+        canvas.pack(fill="both", expand=True)
+
+        # Add stars
+        for _ in range(50):
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="white")
+
+        # Title and star count
+        canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 24), fill="white")
+        canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 16), fill="yellow")
+
+        # Create planets with category labels
+        planet_coords = [(200, 200, 300, 300), (350, 200, 450, 300), (500, 200, 600, 300)]
+        for i, coords in enumerate(planet_coords):
+            canvas.create_oval(coords, fill="blue")
+            canvas.create_text(
+                (coords[0] + coords[2]) // 2,
+                (coords[1] + coords[3]) // 2,
+                text=self.categories[i],
+                fill="white",
+                font=("Arial", 12),
+            )
+
+        # Add buttons aligned at the bottom
+        buttons = [
+            ("Add Task", self.add_task_screen, "lightgreen"),
+            ("View Tasks", self.view_tasks_screen, "lightblue"),
+            ("Customization Shop", self.customization_screen, "lightyellow"),
+        ]
+        for i, (text, command, color) in enumerate(buttons):
+            canvas.create_window(250 + 150 * i, 500, window=tk.Button(self.root, text=text, command=command, bg=color))
+
+    def add_task_screen(self):
+        # Screen for adding a new task
+        self.clear_screen()
+
+        tk.Label(self.root, text="Add New Task", font=("Arial", 20)).pack(pady=20)
+
+        tk.Label(self.root, text="Task Name:").pack(pady=5)
+        entry_name = tk.Entry(self.root)
+        entry_name.pack(pady=5)
+
+        tk.Label(self.root, text="Due Date (YYYY-MM-DD):").pack(pady=5)
+        entry_due_date = tk.Entry(self.root)
+        entry_due_date.pack(pady=5)
+
+        tk.Label(self.root, text="Category:").pack(pady=5)
+        combo_category = ttk.Combobox(self.root, values=self.categories)
+        combo_category.pack(pady=5)
+
+        # Add Calendar
+        calendar_frame = tk.Frame(self.root, bg="#2a2a2e", bd=5, relief="ridge")
+        calendar_frame.pack(pady=10)
+        calendar = Calendar(calendar_frame, selectmode="day", year=2024, month=11, day=16,
+                            background="#2a2a2e", foreground="white", selectbackground="#6c63ff",
+                            borderwidth=1, headersbackground="#444444", headersforeground="white")
+        calendar.pack(pady=(10, 20))
+
+        def save_task():
+            name = entry_name.get()
+            due_date = entry_due_date.get()
+            category = combo_category.get()
+
+            if not name or not due_date or not category:
+                messagebox.showerror("Error", "All fields are required!")
+                return
+
+            self.tasks.append({"name": name, "due_date": due_date, "category": category})
+            self.create_main_screen()
+
+        tk.Button(self.root, text="Save Task", command=save_task, bg="lightgreen").pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=10)
+
+    def view_tasks_screen(self):
+        # Screen for viewing tasks
+        self.clear_screen()
+
+        tk.Label(self.root, text="Tasks", font=("Arial", 20)).pack(pady=20)
+
+        if not self.tasks:
+            tk.Label(self.root, text="No tasks available!", font=("Arial", 14)).pack(pady=20)
+        else:
+            for task in self.tasks:
+                frame = tk.Frame(self.root)
+                frame.pack(pady=5)
+
+                tk.Label(
+                    frame,
+                    text=f"{task['name']} - Due: {task['due_date']} - Category: {task['category']}",
+                    font=("Arial", 14),
+                ).pack(side=tk.LEFT, padx=10)
+
+                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t)).pack(side=tk.LEFT, padx=5)
+
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=20)
+
+    def complete_task(self, task):
+        self.tasks.remove(task)
+        self.stars += 10  # Award stars for task completion
+        messagebox.showinfo("Task Completed", f"Task '{task['name']}' completed! You earned 10 stars.")
+        self.view_tasks_screen()
+
+    def customization_screen(self):
+        # Customization shop
+        self.clear_screen()
+
+        tk.Label(self.root, text="Customization Shop", font=("Arial", 20)).pack(pady=20)
+        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Arial", 16)).pack(pady=10)
+
+        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Arial", 14)).pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="lightgray").pack(pady=20)
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+# Run the app
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = SpaceAgendaPlanner(root)
+    root.mainloop()
