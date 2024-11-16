@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import Calendar
+from tkinter import PhotoImage
+from PIL import Image, ImageTk
 import random
 from datetime import datetime
 
@@ -92,18 +94,25 @@ class SpaceAgendaPlanner:
         canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 28, "bold"), fill="white")
         canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 18), fill="yellow")
 
-        # Create planets with category labels
+        # Store planet images to prevent garbage collection
+        self.planet_images = [
+            ImageTk.PhotoImage(Image.open("mercury.png").resize((100, 100))),
+            ImageTk.PhotoImage(Image.open("neptune.png").resize((125, 125))),
+            ImageTk.PhotoImage(Image.open("saturn.png").resize((200, 100)))
+        ]
+
+        # Define X-coordinates for planets
         button_x_coords = [125, 325, 525]
-        planet_coords = [(x + 25, 250, x + 125, 350) for x in button_x_coords]
-        for i, coords in enumerate(planet_coords):
-            canvas.create_oval(coords, fill="blue")
-            canvas.create_text(
-                (coords[0] + coords[2]) // 2,
-                (coords[1] + coords[3]) // 2,
-                text=self.categories[i],
-                fill="white",
-                font=("Arial", 14, "bold"),
-            )
+
+        # Loop to create buttons and labels for planets
+        for i, x in enumerate(button_x_coords):
+            # Create a button for each planet
+            planet_button = tk.Button(canvas, image=self.planet_images[i], command=lambda category=self.categories[i]: self.handle_planet_click(category), bg="black", borderwidth=0, highlightthickness=0)
+            # Place button on the canvas
+            canvas.create_window(x + 75, 300, window=planet_button, anchor="center")
+
+            # Add category label below the button
+            canvas.create_text(x + 75, 370, text=self.categories[i], fill="white", font=("Arial", 14, "bold"))
 
         # Add buttons aligned at the bottom
         buttons = [
