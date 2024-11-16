@@ -1,34 +1,51 @@
-import tkinter as tk
+from tkinter import *
+from tkcalendar import Calendar
 from tkinter import ttk
 
 
-def save_agenda():
-    date = date_entry.get()
-    task = task_entry.get()
-    agenda_list.insert(tk.END, f"{date}: {task}")
-    date_entry.delete(0, tk.END)
-    task_entry.delete(0, tk.END)
+# Create Main Window
+root = Tk()
+root.geometry("600x600")
+root.title("Starpath Planner")
 
 
-app = tk.Tk()
-app.title("Agenda Planner")
+# Load Background Image
+backg = PhotoImage(file="spacebackground.png")
 
 
-tk.Label(app, text="Date (YYYY-MM-DD):").grid(row=0, column=0)
-date_entry = tk.Entry(app)
-date_entry.grid(row=0, column=1)
+# Add Background Label
+background_label = Label(root, image=backg)
+background_label.place(relwidth=1, relheight=1)
 
 
-tk.Label(app, text="Task:").grid(row=1, column=0)
-task_entry = tk.Entry(app)
-task_entry.grid(row=1, column=1)
+# Create Frame for Widgets
+frame1 = Frame(root, bg="#000000", bd=2)  # Use a slight border to distinguish frame
+frame1.place(relx=0.5, rely=0.5, anchor=CENTER, width=500, height=400)
 
 
-tk.Button(app, text="Add Task", command=save_agenda).grid(row=2, column=0, columnspan=2)
+# Add Calendar
+calendar = Calendar(frame1, selectmode="day", year=2024, month=11, day=16,
+                    background="#1e1f26", foreground="white", selectbackground="#6c63ff")
+calendar.pack(pady=20)
 
 
-agenda_list = tk.Listbox(app, width=50, height=10)
-agenda_list.grid(row=3, column=0, columnspan=2)
+# Add Label and Entry for Task
+task_label = Label(frame1, text="Task:", font=("Helvetica", 14), bg="#000000", fg="white")
+task_label.pack()
 
 
-app.mainloop()
+task_entry = Entry(frame1, width=30, font=("Helvetica", 14))
+task_entry.pack(pady=10)
+
+
+# Add Buttons
+add_button = Button(frame1, text="Add Task", bg="#6c63ff", fg="white", font=("Helvetica", 12))
+add_button.pack(pady=10)
+
+
+view_button = Button(frame1, text="View Agenda", bg="#6c63ff", fg="white", font=("Helvetica", 12))
+view_button.pack(pady=10)
+
+
+# Run Application
+root.mainloop()
