@@ -28,21 +28,36 @@ class SpaceAgendaPlanner:
         self.splash_canvas.pack(fill="both", expand=True)
 
         # Add stars to the background
-        for _ in range(100):
+        for _ in range(50):  # White stars
             x, y = random.randint(0, 800), random.randint(0, 600)
             self.splash_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
+        for _ in range(30):  # Yellow stars
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            self.splash_canvas.create_oval(x, y, x + 3, y + 3, fill="yellow", outline="")
+        for _ in range(20):  # Galaxies (larger, faint stars)
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            self.splash_canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
         # Add text with aesthetic font
-        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20), fill="white")
+        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20, "italic"), fill="white")
         
         # Load spaceship image
-        self.spaceship_image = tk.PhotoImage(file="rocket.png")  # Ensure you have spaceship.png
-        self.spaceship_image = self.spaceship_image.subsample(2, 3)
+        spaceship_img = Image.open("rocket.png").convert("RGBA").resize((100, 100))
+        # Ensure transparency by removing white background
+        datas = spaceship_img.getdata()
+        new_data = []
+        for item in datas:
+            if item[:3] == (255, 255, 255):  # Make white transparent
+                new_data.append((255, 255, 255, 0))
+            else:
+                new_data.append(item)
+        spaceship_img.putdata(new_data)
+        self.spaceship_image = ImageTk.PhotoImage(spaceship_img)
         self.rocket = self.splash_canvas.create_image(400, 500, image=self.spaceship_image)
         self.thrust_particles = []
 
         # Animate rocket flying up
-        self.rocket_speed = 8  # Initial speed
+        self.rocket_speed = 5  # Initial speed
         self.animate_rocket()
 
     def animate_rocket(self):
@@ -86,9 +101,15 @@ class SpaceAgendaPlanner:
         canvas.pack(fill="both", expand=True)
 
         # Add stars
-        for _ in range(50):
+        for _ in range(50):  # White stars
             x, y = random.randint(0, 800), random.randint(0, 600)
             canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="white")
+        for _ in range(30):  # Yellow stars
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            canvas.create_oval(x, y, x + 3, y + 3, fill="yellow", outline="")
+        for _ in range(20):  # Galaxies (larger, faint stars)
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
         # Title and star count
         canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 28, "bold"), fill="white")
