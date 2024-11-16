@@ -31,7 +31,7 @@ class SpaceAgendaPlanner:
             self.splash_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
 
         # Add text with aesthetic font
-        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20, "italic"), fill="white")
+        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20), fill="white")
         
         # Load spaceship image
         self.spaceship_image = tk.PhotoImage(file="rocket.png")  # Ensure you have spaceship.png
