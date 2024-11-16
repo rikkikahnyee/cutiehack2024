@@ -40,7 +40,7 @@ class SpaceAgendaPlanner:
         self.thrust_particles = []
 
         # Animate rocket flying up
-        self.rocket_speed = 5  # Initial speed
+        self.rocket_speed = 8  # Initial speed
         self.animate_rocket()
 
     def animate_rocket(self):
