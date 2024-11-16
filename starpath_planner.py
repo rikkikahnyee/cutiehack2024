@@ -34,7 +34,7 @@ class SpaceAgendaPlanner:
         
         # Load spaceship image
         self.spaceship_image = tk.PhotoImage(file="rocket.png")  # Ensure you have spaceship.png
-        self.spaceship_image = self.spaceship_image.subsample(3, 3)
+        self.spaceship_image = self.spaceship_image.subsample(2, 3)
         self.rocket = self.splash_canvas.create_image(400, 500, image=self.spaceship_image)
         self.thrust_particles = []
 
@@ -122,7 +122,7 @@ class SpaceAgendaPlanner:
         entry_name = tk.Entry(self.root)
         entry_name.pack(pady=5)
 
-        tk.Label(self.root, text="Due Date (YYYY-MM-DD):").pack(pady=5)
+        tk.Label(self.root, text="Due Date (MM-DD-YYYY):").pack(pady=5)
         entry_due_date = tk.Entry(self.root)
         entry_due_date.pack(pady=5)
 
@@ -167,10 +167,11 @@ class SpaceAgendaPlanner:
                 frame.pack(pady=5)
 
                 tk.Label(
-                    frame,
-                    text=f"{task['name']} - Due: {task['due_date']} - Category: {task['category']}",
-                    font=("Arial", 14),
-                ).pack(side=tk.LEFT, padx=10)
+    frame,
+    text=f"Due Date: {task['due_date']}\nTask Name: {task['name']}\nCategory: {task['category']}",
+    font=("Arial", 14),
+).pack(side=tk.LEFT, padx=10)
+
 
                 tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t)).pack(side=tk.LEFT, padx=5)
 
