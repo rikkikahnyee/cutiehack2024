@@ -110,13 +110,13 @@ class SpaceAgendaPlanner:
             ("Customization Shop", self.customization_screen, "lightyellow"),
         ]
         for i, (text, command, color) in enumerate(buttons):
-            canvas.create_window(250 + 150 * i, 500, window=tk.Button(self.root, text=text, command=command, bg=color))
+            canvas.create_window(250 + 150 * i, 500, window=tk.Button(self.root, text=text, command=command, bg=color, width=18, height=3))
 
     def add_task_screen(self):
         # Screen for adding a new task
         self.clear_screen()
 
-        tk.Label(self.root, text="Add New Task", font=("Arial", 20)).pack(pady=20)
+        tk.Label(self.root, text="Add New Task", font=("Tahoma", 20)).pack(pady=20)
 
         tk.Label(self.root, text="Task Name:").pack(pady=5)
         entry_name = tk.Entry(self.root)
