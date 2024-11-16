@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import Calendar
 import random
+from datetime import datetime
 
 class SpaceAgendaPlanner:
     def __init__(self, root):
@@ -148,7 +149,13 @@ class SpaceAgendaPlanner:
                 messagebox.showerror("Error", "All fields are required!")
                 return
 
-            self.tasks.append({"name": name, "due_date": due_date, "category": category})
+            try:
+                due_date_obj = datetime.strptime(due_date, "%m-%d-%Y")
+            except ValueError:
+                messagebox.showerror("Error", "Invalid date format! Use MM-DD-YYYY.")
+                return
+
+            self.tasks.append({"name": name, "due_date": due_date_obj, "category": category})
             self.create_main_screen()
 
         tk.Button(self.root, text="Save Task", command=save_task, bg="#32CD32", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=10)
@@ -163,13 +170,18 @@ class SpaceAgendaPlanner:
         if not self.tasks:
             tk.Label(self.root, text="No tasks available!", font=("Arial", 16), bg="black", fg="white").pack(pady=20)
         else:
+            # Sort tasks by due date
+            # Sort tasks by due date
+            self.tasks = sorted(self.tasks, key=lambda task: task['due_date'])
+
+            # Display tasks
             for task in self.tasks:
                 frame = tk.Frame(self.root, bg="black")
                 frame.pack(pady=5)
 
                 tk.Label(
                     frame,
-                    text=f"Due Date: {task['due_date']}\nTask Name: {task['name']}\nCategory: {task['category']}",
+                    text=f"Due Date: {task['due_date'].strftime('%m-%d-%Y')}\nTask Name: {task['name']}\nCategory: {task['category']}",
                     font=("Arial", 14),
                     bg="black",
                     fg="white"
