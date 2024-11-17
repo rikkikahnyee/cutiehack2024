@@ -27,9 +27,15 @@ class SpaceAgendaPlanner:
         home_canvas.pack(fill="both", expand=True)
         
         # Add stars to the background
-        for _ in range(100):
+        for _ in range(50):  # White stars
             x, y = random.randint(0, 800), random.randint(0, 600)
             home_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
+        for _ in range(30):  # Yellow stars
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            home_canvas.create_oval(x, y, x + 3, y + 3, fill="yellow", outline="")
+        for _ in range(20):  # Galaxies (larger, faint stars)
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            home_canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
         home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("Times New Roman", 40), fill="white")
         home_canvas.create_text(400, 350, text="Create space in your day!", font=("Times New Roman", 30), fill="white")
