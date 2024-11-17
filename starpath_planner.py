@@ -43,7 +43,7 @@ class SpaceAgendaPlanner:
         imageObject = []
         for i in range(frames):
             astro_image.seek(i)  # Move to the i-th frame
-            resized_image = astro_image.resize((100, 100))  # Resize the image to 100x100 (example size)
+            resized_image = astro_image.resize((140, 100))  # Resize the image to 100x100 (example size)
             frame_image = ImageTk.PhotoImage(resized_image)  # Convert to PhotoImage
             imageObject.append(frame_image)
 
