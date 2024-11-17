@@ -37,7 +37,7 @@ class SpaceAgendaPlanner:
             x, y = random.randint(0, 800), random.randint(0, 600)
             home_canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
-        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("impact", 40), fill="white")
+        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("Courier New", 50), fill="white")
         home_canvas.create_text(400, 350, text="Create space in your day!", font=("Courier New", 30), fill="white")
 
         home_canvas.create_window(400, 500, window=tk.Button(self.root, text="LAUNCH", command=self.show_splash_screen, bg="#ffffff", font=("Courier New", 24)))
@@ -175,7 +175,7 @@ class SpaceAgendaPlanner:
             canvas.create_window(x + 95, 300, window=planet_button, anchor="center")
 
             # Add category label below the button
-            canvas.create_text(x + 95, 370, text=self.categories[i], fill="white", font=("Arial", 14, "bold"))
+            canvas.create_text(x + 95, 370, text=self.categories[i], fill="white", font=("Courier New", 14, "bold"))
 
         # Add buttons aligned at the bottom with rectangular shape, depth, and curved edges
         buttons = [
@@ -191,12 +191,12 @@ class SpaceAgendaPlanner:
         # Filter tasks by the selected category and display them
         self.clear_screen()
 
-        tk.Label(self.root, text=f"{category} Tasks", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text=f"{category} Tasks", font=("Courier New", 20, "bold"), bg="black", fg="white").pack(pady=20)
 
         filtered_tasks = [task for task in self.tasks if task['category'] == category]
 
         if not filtered_tasks:
-            tk.Label(self.root, text="No tasks available!", font=("Arial", 16), bg="black", fg="white").pack(pady=20)
+            tk.Label(self.root, text="No tasks available!", font=("Courier New", 16), bg="black", fg="white").pack(pady=20)
         else:
             for task in filtered_tasks:
                 frame = tk.Frame(self.root, bg="black")
@@ -205,32 +205,32 @@ class SpaceAgendaPlanner:
                 tk.Label(
                     frame,
                     text=f"Due Date: {task['due_date'].strftime('%m-%d-%Y')}\nTask Name: {task['name']}",
-                    font=("Arial", 14),
+                    font=("Courier New", 14),
                     bg="black",
                     fg="white"
                 ).pack(side=tk.LEFT, padx=10)
 
-                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#FF4500", fg="white", font=("Arial", 12, "bold")).pack(side=tk.LEFT, padx=5)
+                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#FF4500", fg="white", font=("Courier New", 12, "bold")).pack(side=tk.LEFT, padx=5)
 
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=20)
 
     def add_task_screen(self):
         # Screen for adding a new task
         self.clear_screen()
 
-        tk.Label(self.root, text="Add New Task", font=("Tahoma", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text="Add New Task", font=("Courier New", 20, "bold"), bg="black", fg="white").pack(pady=20)
 
-        tk.Label(self.root, text="Task Name:", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
-        entry_name = tk.Entry(self.root, font=("Arial", 14))
+        tk.Label(self.root, text="Task Name:", bg="black", fg="white", font=("Courier New", 14)).pack(pady=5)
+        entry_name = tk.Entry(self.root, font=("Courier New", 14))
         entry_name.pack(pady=5)
 
-        tk.Label(self.root, text="Due Date (MM-DD-YYYY):", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
-        tk.Label(self.root, text="(Select a date on the calendar to automatically fill in the date field)", bg="black", fg="grey", font=("Arial", 12)).pack(pady=2)
-        entry_due_date = tk.Entry(self.root, font=("Arial", 14))
+        tk.Label(self.root, text="Due Date (MM/DD/YY):", bg="black", fg="white", font=("Courier New", 14)).pack(pady=5)
+        tk.Label(self.root, text="(Select a date on the calendar to automatically fill in the date field)", bg="black", fg="grey", font=("Courier New", 12)).pack(pady=2)
+        entry_due_date = tk.Entry(self.root, font=("Courier New", 14))
         entry_due_date.pack(pady=5)
 
-        tk.Label(self.root, text="Category:", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
-        combo_category = ttk.Combobox(self.root, values=self.categories, font=("Arial", 14))
+        tk.Label(self.root, text="Category:", bg="black", fg="white", font=("Courier New", 14)).pack(pady=5)
+        combo_category = ttk.Combobox(self.root, values=self.categories, font=("Courier New", 14))
         combo_category.pack(pady=5)
 
         # Add Calendar
@@ -258,25 +258,25 @@ class SpaceAgendaPlanner:
                 return
 
             try:
-                due_date_obj = datetime.strptime(due_date, "%m-%d-%Y")
+                due_date_obj = datetime.strptime(due_date, "%m/%d/%y")
             except ValueError:
-                messagebox.showerror("Error", "Invalid date format! Use MM-DD-YYYY.")
+                messagebox.showerror("Error", "Invalid date format! Use MM/DD/YY.")
                 return
 
             self.tasks.append({"name": name, "due_date": due_date_obj, "category": category})
             self.create_main_screen()
 
-        tk.Button(self.root, text="Save Task", command=save_task, bg="#32CD32", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=10)
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=10)
+        tk.Button(self.root, text="Save Task", command=save_task, bg="#32CD32", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=10)
 
     def view_tasks_screen(self):
         # Screen for viewing tasks
         self.clear_screen()
 
-        tk.Label(self.root, text="Tasks", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text="Tasks", font=("Courier New", 20, "bold"), bg="black", fg="white").pack(pady=20)
 
         if not self.tasks:
-            tk.Label(self.root, text="No tasks available!", font=("Arial", 16), bg="black", fg="white").pack(pady=20)
+            tk.Label(self.root, text="No tasks available!", font=("Courier New", 16), bg="black", fg="white").pack(pady=20)
         else:
             # Sort tasks by due date
             # Sort tasks by due date
@@ -284,20 +284,20 @@ class SpaceAgendaPlanner:
 
             # Display tasks
             for task in self.tasks:
-                frame = tk.Frame(self.root, bg="black")
+                frame = tk.Frame(self.root, bg="#d2ac3d")
                 frame.pack(pady=5)
 
                 tk.Label(
                     frame,
                     text=f"Due Date: {task['due_date'].strftime('%m-%d-%Y')}\nTask Name: {task['name']}\nCategory: {task['category']}",
-                    font=("Arial", 14),
-                    bg="black",
-                    fg="white"
+                    font=("Courier New", 14),
+                    bg="#d2ac3d",
+                    fg="black"
                 ).pack(side=tk.LEFT, padx=10)
 
-                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#FF4500", fg="white", font=("Arial", 12, "bold")).pack(side=tk.LEFT, padx=5)
+                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#95d67c", fg="black", font=("Courier New", 12, "bold")).pack(side=tk.LEFT, padx=5)
 
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=20)
 
     def complete_task(self, task):
         self.tasks.remove(task)
@@ -309,11 +309,11 @@ class SpaceAgendaPlanner:
         # Customization shop
         self.clear_screen()
 
-        tk.Label(self.root, text="Customization Shop", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
-        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Arial", 16), bg="black", fg="yellow").pack(pady=10)
+        tk.Label(self.root, text="Customization Shop", font=("Courier New", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Courier New", 16), bg="black", fg="yellow").pack(pady=10)
 
-        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Arial", 14), bg="black", fg="white").pack(pady=10)
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
+        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Courier New", 14), bg="black", fg="white").pack(pady=10)
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=20)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
