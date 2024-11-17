@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import Calendar
-from tkinter import PhotoImage
+from tkinter import PhotoImage, Label
 from PIL import Image, ImageTk
 import random
 from datetime import datetime
@@ -19,11 +19,49 @@ class SpaceAgendaPlanner:
         self.categories = ["Work", "Personal", "Fitness"]
         self.stars = 0
 
-        # Start with splash screen
-        self.show_splash_screen()
+        # Start with home screen
+        self.show_home_screen()
+
+    def show_home_screen(self):
+        home_canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
+        home_canvas.pack(fill="both", expand=True)
+        
+        # Add stars to the background
+        for _ in range(100):
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            home_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
+
+        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("Times New Roman", 40), fill="white")
+        home_canvas.create_text(400, 350, text="Create space in your day!", font=("Times New Roman", 30), fill="white")
+
+        home_canvas.create_window(400, 500, window=tk.Button(self.root, text="LAUNCH", command=self.show_splash_screen, bg="#ffffff", font=("Times New Roman", 24)))
+
+        giphyFile = "giphy.gif"
+        astro_image = Image.open(giphyFile)
+        frames = astro_image.n_frames
+
+        imageObject = []
+        for i in range(frames):
+            astro_image.seek(i)  # Move to the i-th frame
+            resized_image = astro_image.resize((100, 100))  # Resize the image to 100x100 (example size)
+            frame_image = ImageTk.PhotoImage(resized_image)  # Convert to PhotoImage
+            imageObject.append(frame_image)
+
+        def animation(count):
+            newImage = imageObject[count]
+            gif_Label.configure(image=newImage)
+            count += 1
+            if count == frames:
+                count = 0
+            self.root.after(200, lambda: animation(count))
+
+        gif_Label = Label(self.root, image="", bg="black")
+        gif_Label.place(x=500, y=442)
+        animation(0)
 
     def show_splash_screen(self):
         # Splash screen with starry background and rocket animation
+        self.clear_screen()
         self.splash_canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
         self.splash_canvas.pack(fill="both", expand=True)
 
@@ -61,7 +99,7 @@ class SpaceAgendaPlanner:
 
     def animate_rocket(self):
         # Move the spaceship image in a straight line upwards
-        self.splash_canvas.move(self.rocket, 0, -10)
+        self.splash_canvas.move(self.rocket, 0, -15)
 
         # Create dynamic thrust particles
         x1, y1 = self.splash_canvas.coords(self.rocket)
@@ -84,7 +122,7 @@ class SpaceAgendaPlanner:
         # Check if rocket is off-screen
         coords = self.splash_canvas.coords(self.rocket)
         if coords[1] > -100:  # Rocket still visible
-            self.root.after(40, self.animate_rocket)
+            self.root.after(30, self.animate_rocket)
         else:
             # Transition to the main planner page
             self.splash_canvas.destroy()

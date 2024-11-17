@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import ttk
 from tkcalendar import Calendar
-from tkinter import PhotoImage
+from tkinter import PhotoImage, Label
 from PIL import Image, ImageTk
 import random
 from datetime import datetime
@@ -19,11 +19,49 @@ class SpaceAgendaPlanner:
         self.categories = ["Work", "Personal", "Fitness"]
         self.stars = 0
 
-        # Start with splash screen
-        self.show_splash_screen()
+        # Start with home screen
+        self.show_home_screen()
+
+    def show_home_screen(self):
+        home_canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
+        home_canvas.pack(fill="both", expand=True)
+        
+        # Add stars to the background
+        for _ in range(100):
+            x, y = random.randint(0, 800), random.randint(0, 600)
+            home_canvas.create_oval(x, y, x + 2, y + 2, fill="white", outline="")
+
+        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("Times New Roman", 40), fill="white")
+        home_canvas.create_text(400, 350, text="Create space in your day!", font=("Times New Roman", 30), fill="white")
+
+        home_canvas.create_window(400, 500, window=tk.Button(self.root, text="LAUNCH", command=self.show_splash_screen, bg="#ffffff", font=("Times New Roman", 24)))
+
+        giphyFile = "giphy.gif"
+        astro_image = Image.open(giphyFile)
+        frames = astro_image.n_frames
+
+        imageObject = []
+        for i in range(frames):
+            astro_image.seek(i)  # Move to the i-th frame
+            resized_image = astro_image.resize((100, 100))  # Resize the image to 100x100 (example size)
+            frame_image = ImageTk.PhotoImage(resized_image)  # Convert to PhotoImage
+            imageObject.append(frame_image)
+
+        def animation(count):
+            newImage = imageObject[count]
+            gif_Label.configure(image=newImage)
+            count += 1
+            if count == frames:
+                count = 0
+            self.root.after(200, lambda: animation(count))
+
+        gif_Label = Label(self.root, image="", bg="black")
+        gif_Label.place(x=500, y=442)
+        animation(0)
 
     def show_splash_screen(self):
         # Splash screen with starry background and rocket animation
+        self.clear_screen()
         self.splash_canvas = tk.Canvas(self.root, width=800, height=600, bg="black", highlightthickness=0)
         self.splash_canvas.pack(fill="both", expand=True)
 
@@ -56,14 +94,12 @@ class SpaceAgendaPlanner:
         self.rocket = self.splash_canvas.create_image(400, 500, image=self.spaceship_image)
         self.thrust_particles = []
 
-        # Animate rocket flying up
-        self.rocket_speed = 5  # Initial speed
+        # Animate rocket in a straight line
         self.animate_rocket()
 
     def animate_rocket(self):
-        # Move the spaceship image and add thrust particles
-        self.splash_canvas.move(self.rocket, 0, -self.rocket_speed)
-        self.rocket_speed += 0.3  # Accelerate the rocket
+        # Move the spaceship image in a straight line upwards
+        self.splash_canvas.move(self.rocket, 0, -15)
 
         # Create dynamic thrust particles
         x1, y1 = self.splash_canvas.coords(self.rocket)
@@ -85,8 +121,8 @@ class SpaceAgendaPlanner:
 
         # Check if rocket is off-screen
         coords = self.splash_canvas.coords(self.rocket)
-        if coords[1] > 0:  # Rocket still visible
-            self.root.after(50, self.animate_rocket)
+        if coords[1] > -100:  # Rocket still visible
+            self.root.after(30, self.animate_rocket)
         else:
             # Transition to the main planner page
             self.splash_canvas.destroy()
@@ -135,14 +171,42 @@ class SpaceAgendaPlanner:
             # Add category label below the button
             canvas.create_text(x + 75, 370, text=self.categories[i], fill="white", font=("Arial", 14, "bold"))
 
-        # Add buttons aligned at the bottom
+        # Add buttons aligned at the bottom with rectangular shape, depth, and curved edges
         buttons = [
             ("Add Task", self.add_task_screen, "#32CD32"),
             ("View Tasks", self.view_tasks_screen, "#1E90FF"),
             ("Customization Shop", self.customization_screen, "#FFD700"),
         ]
         for i, (text, command, color) in enumerate(buttons):
-            tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2).place(x=button_x_coords[i], y=500)
+            button = tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2, relief="raised", bd=5)
+            button.place(x=button_x_coords[i], y=500)
+
+    def handle_planet_click(self, category):
+        # Filter tasks by the selected category and display them
+        self.clear_screen()
+
+        tk.Label(self.root, text=f"{category} Tasks", font=("Arial", 20, "bold"), bg="black", fg="white").pack(pady=20)
+
+        filtered_tasks = [task for task in self.tasks if task['category'] == category]
+
+        if not filtered_tasks:
+            tk.Label(self.root, text="No tasks available!", font=("Arial", 16), bg="black", fg="white").pack(pady=20)
+        else:
+            for task in filtered_tasks:
+                frame = tk.Frame(self.root, bg="black")
+                frame.pack(pady=5)
+
+                tk.Label(
+                    frame,
+                    text=f"Due Date: {task['due_date'].strftime('%m-%d-%Y')}\nTask Name: {task['name']}",
+                    font=("Arial", 14),
+                    bg="black",
+                    fg="white"
+                ).pack(side=tk.LEFT, padx=10)
+
+                tk.Button(frame, text="Complete", command=lambda t=task: self.complete_task(t), bg="#FF4500", fg="white", font=("Arial", 12, "bold")).pack(side=tk.LEFT, padx=5)
+
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Arial", 14, "bold"), width=12).pack(pady=20)
 
     def add_task_screen(self):
         # Screen for adding a new task
@@ -246,5 +310,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = SpaceAgendaPlanner(root)
     root.mainloop()
-
-
