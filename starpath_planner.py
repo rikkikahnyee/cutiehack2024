@@ -219,6 +219,7 @@ class SpaceAgendaPlanner:
         entry_name.pack(pady=5)
 
         tk.Label(self.root, text="Due Date (MM-DD-YYYY):", bg="black", fg="white", font=("Arial", 14)).pack(pady=5)
+        tk.Label(self.root, text="(Select a date on the calendar to automatically fill in the date field)", bg="black", fg="grey", font=("Arial", 12)).pack(pady=2)
         entry_due_date = tk.Entry(self.root, font=("Arial", 14))
         entry_due_date.pack(pady=5)
 
