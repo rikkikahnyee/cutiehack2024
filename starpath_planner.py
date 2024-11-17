@@ -309,11 +309,54 @@ class SpaceAgendaPlanner:
         # Customization shop
         self.clear_screen()
 
-        tk.Label(self.root, text="Customization Shop", font=("Courier New", 20, "bold"), bg="black", fg="white").pack(pady=20)
-        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Courier New", 16), bg="black", fg="yellow").pack(pady=10)
+        tk.Label(self.root, text="Customization Shop", font=("Times New Roman", 20, "bold"), bg="black", fg="white").pack(pady=20)
+        tk.Label(self.root, text=f"Stars: {self.stars}", font=("Times New Roman", 16), bg="black", fg="yellow").pack(pady=10)
 
-        tk.Label(self.root, text="(Future feature: Buy items with stars)", font=("Courier New", 14), bg="black", fg="white").pack(pady=10)
-        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Courier New", 14, "bold"), width=12).pack(pady=20)
+        items = [
+            ("Plant a Tree", 20, "Arbor Day Foundation: Support vital habitats, recovery from wildfires, and community strengthening."),
+            ("World Wildlife Fund", 30, "Protect endangered species and their habitats globally."),
+            ("Ocean Conservancy", 40, "Work to protect the ocean from global challenges like plastic pollution."),
+            ("IFAW", 50, "Provide rescue and care for animals impacted by natural disasters or human conflict."),
+            ("ShelterBox", 60, "Deliver emergency shelter to families displaced by earthquakes."),
+            ("Direct Relief", 70, "Provide medical supplies and disaster relief in the aftermath of hurricanes."),
+            ("GlobalGiving Wildfire Relief", 80, "Support local organizations during wildfires globally."),
+            ("UNICEF", 90, "Provide emergency food, water, healthcare, and education for children globally."),
+            ("Rainforest Alliance", 100, "Conserve rainforests and support sustainable livelihoods."),
+            ("Mental Health America", 110, "Provide mental health education, prevention, and advocacy.")
+        ]
+
+        def purchase_item(points, name):
+            if self.stars >= points:
+                self.stars -= points
+                messagebox.showinfo("Purchase Successful", f"You've successfully purchased '{name}'.")
+                self.customization_screen()  # Update the screen after purchase
+            else:
+                messagebox.showerror("Insufficient Stars", "You do not have enough stars for this purchase.")
+
+        for item in items:
+            frame = tk.Frame(self.root, bg="black")
+            frame.pack(pady=5)
+
+            tk.Label(
+                frame,
+                text=f"{item[0]} - {item[1]} points\n{item[2]}",
+                font=("Arial", 14),
+                bg="black",
+                fg="white",
+                wraplength=500,
+                justify="left"
+            ).pack(side=tk.LEFT, padx=10)
+
+            tk.Button(
+                frame,
+                text="Purchase",
+                command=lambda points=item[1], name=item[0]: purchase_item(points, name),
+                bg="#FFD700",
+                fg="black",
+                font=("Arial", 12, "bold")
+            ).pack(side=tk.LEFT, padx=5)
+
+        tk.Button(self.root, text="Back", command=self.create_main_screen, bg="#A9A9A9", fg="black", font=("Times New ", 14, "bold"), width=12).pack(pady=20)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
