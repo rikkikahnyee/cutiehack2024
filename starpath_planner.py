@@ -322,7 +322,6 @@ class SpaceAgendaPlanner:
             ("GlobalGiving Wildfire Relief", 80, "Support local organizations during wildfires globally."),
             ("UNICEF", 90, "Provide emergency food, water, healthcare, and education for children globally."),
             ("Rainforest Alliance", 100, "Conserve rainforests and support sustainable livelihoods."),
-            ("Mental Health America", 110, "Provide mental health education, prevention, and advocacy.")
         ]
 
         def purchase_item(points, name):
