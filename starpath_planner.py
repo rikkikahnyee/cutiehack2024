@@ -37,10 +37,10 @@ class SpaceAgendaPlanner:
             x, y = random.randint(0, 800), random.randint(0, 600)
             home_canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
-        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("Times New Roman", 40), fill="white")
-        home_canvas.create_text(400, 350, text="Create space in your day!", font=("Times New Roman", 30), fill="white")
+        home_canvas.create_text(400, 200, text="WELCOME TO STARPATH", font=("impact", 40), fill="white")
+        home_canvas.create_text(400, 350, text="Create space in your day!", font=("Courier New", 30), fill="white")
 
-        home_canvas.create_window(400, 500, window=tk.Button(self.root, text="LAUNCH", command=self.show_splash_screen, bg="#ffffff", font=("Times New Roman", 24)))
+        home_canvas.create_window(400, 500, window=tk.Button(self.root, text="LAUNCH", command=self.show_splash_screen, bg="#ffffff", font=("Courier New", 24)))
 
         giphyFile = "giphy.gif"
         astro_image = Image.open(giphyFile)
@@ -83,7 +83,7 @@ class SpaceAgendaPlanner:
             self.splash_canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
         # Add text with aesthetic font
-        self.splash_canvas.create_text(400, 100, text="Initializing Universe...", font=("Arial", 20, "italic"), fill="white")
+        self.splash_canvas.create_text(400, 100, text="INITIALIZING UNIVERSE...", font=("Courier New", 20, "italic", "bold"), fill="white")
         
         # Load spaceship image
         spaceship_img = Image.open("rocket.png").convert("RGBA").resize((140, 100))
@@ -154,8 +154,8 @@ class SpaceAgendaPlanner:
             canvas.create_oval(x, y, x + 8, y + 8, fill="lightblue", outline="")
 
         # Title and star count
-        canvas.create_text(400, 50, text="Space-Themed Agenda Planner", font=("Arial", 28, "bold"), fill="white")
-        canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Arial", 18), fill="yellow")
+        canvas.create_text(400, 50, text="StarPath Planner", font=("Courier New", 28, "bold"), fill="white")
+        canvas.create_text(400, 100, text=f"Stars Earned: {self.stars}", font=("Courier New", 18), fill="yellow")
 
         # Store planet images to prevent garbage collection
         self.planet_images = [
@@ -165,17 +165,17 @@ class SpaceAgendaPlanner:
         ]
 
         # Define X-coordinates for planets
-        button_x_coords = [125, 325, 525]
+        button_x_coords = [70, 295, 520]
 
         # Loop to create buttons and labels for planets
         for i, x in enumerate(button_x_coords):
             # Create a button for each planet
             planet_button = tk.Button(canvas, image=self.planet_images[i], command=lambda category=self.categories[i]: self.handle_planet_click(category), bg="black", borderwidth=0, highlightthickness=0)
             # Place button on the canvas
-            canvas.create_window(x + 75, 300, window=planet_button, anchor="center")
+            canvas.create_window(x + 95, 300, window=planet_button, anchor="center")
 
             # Add category label below the button
-            canvas.create_text(x + 75, 370, text=self.categories[i], fill="white", font=("Arial", 14, "bold"))
+            canvas.create_text(x + 95, 370, text=self.categories[i], fill="white", font=("Arial", 14, "bold"))
 
         # Add buttons aligned at the bottom with rectangular shape, depth, and curved edges
         buttons = [
@@ -184,7 +184,7 @@ class SpaceAgendaPlanner:
             ("Customization Shop", self.customization_screen, "#FFD700"),
         ]
         for i, (text, command, color) in enumerate(buttons):
-            button = tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Arial", 14, "bold"), width=15, height=2, relief="raised", bd=5)
+            button = tk.Button(self.root, text=text, command=command, bg=color, fg="black", font=("Courier New", 14, "bold"), width=18, height=2, relief="raised", bd=5)
             button.place(x=button_x_coords[i], y=500)
 
     def handle_planet_click(self, category):
