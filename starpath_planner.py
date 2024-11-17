@@ -234,6 +234,13 @@ class SpaceAgendaPlanner:
                             borderwidth=1, headersbackground="#444444", headersforeground="white")
         calendar.pack(pady=(10, 20))
 
+        # Update the due date entry when a date is selected on the calendar
+        def update_due_date():
+            entry_due_date.delete(0, tk.END)
+            entry_due_date.insert(0, calendar.get_date())
+
+        calendar.bind("<<CalendarSelected>>", lambda event: update_due_date())
+
         def save_task():
             name = entry_name.get()
             due_date = entry_due_date.get()
